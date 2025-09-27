@@ -2,6 +2,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomInputWithLabel from "@/components/CustomInputWithLabel";
 import useUserStore from "@/stores/userStore";
 import validateRegister from "@/validation/registerValidator";
+import { isAxiosError } from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -24,7 +25,7 @@ export default function RegisterPage() {
   const [input, setInput] = useState(initialInput);
   const [error, setError] = useState(initialError);
 
-  const hdlSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const hdlSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = validateRegister(input);
     if (result.error && result.errors) {
@@ -32,9 +33,15 @@ export default function RegisterPage() {
       toast.error("Register failed");
       return;
     }
-    register(input);
-    toast.success("Register success");
-    navigate("/login");
+    try {
+      await register(input);
+      toast.success("Register success");
+      navigate("/login");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      }
+    }
   };
 
   const hdlOnChange = (e: ChangeEvent<HTMLInputElement>) => {

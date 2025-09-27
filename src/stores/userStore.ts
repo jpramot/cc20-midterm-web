@@ -10,7 +10,7 @@ type userStore = {
   loading: boolean;
   login: (user: User) => Promise<void>;
   logout: () => void;
-  register: (user: User) => void;
+  register: (user: User) => Promise<void>;
 };
 
 const useUserStore = create<userStore>()(
@@ -42,6 +42,7 @@ const useUserStore = create<userStore>()(
         } catch (err) {
           if (isAxiosError(err)) {
             console.log(err.response?.data);
+            throw err;
           } else console.log("something error");
         }
       },

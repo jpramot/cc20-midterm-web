@@ -7,6 +7,8 @@ import { FaHeart } from "react-icons/fa";
 import type { CreateFavMovie } from "@/types/movie";
 import Loading from "@/utils/Loading";
 import { Button } from "@/components/ui/button";
+import { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function MovieDetailPage() {
   const {
@@ -45,17 +47,29 @@ export default function MovieDetailPage() {
     setIsFav(allFavMovies.some((movie) => movie.movieId === parseInt(movieId!)));
   }, [allFavMovies]);
 
-  const hdlAddFavMovie = () => {
+  const hdlAddFavMovie = async () => {
     const body: CreateFavMovie = {
       title,
       movieId: parseInt(movieId!),
       posterPath: poster_path,
     };
-    addFavoriteMovie(body);
+    try {
+      await addFavoriteMovie(body);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      }
+    }
   };
 
-  const hdlUnFavMovie = () => {
-    deleteFavoriteMovie(parseInt(movieId!));
+  const hdlUnFavMovie = async () => {
+    try {
+      await deleteFavoriteMovie(parseInt(movieId!));
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      }
+    }
   };
 
   if (movieLoading) {

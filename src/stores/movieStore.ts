@@ -26,8 +26,8 @@ type MovieStore = {
   getAllFavMovies: () => void;
   getMovieDetail: (id: number) => void;
   searchMovie: (movie: string) => void;
-  addFavoriteMovie: (body: CreateFavMovie) => void;
-  deleteFavoriteMovie: (id: number) => void;
+  addFavoriteMovie: (body: CreateFavMovie) => Promise<void>;
+  deleteFavoriteMovie: (id: number) => Promise<void>;
   getFavMovie: (id: number) => void;
 };
 
@@ -157,10 +157,9 @@ const useMovieStore = create<
           }));
         } catch (err) {
           if (isAxiosError(err)) {
-            console.log(err.response?.data);
-            console.log(err.response?.data?.message);
+            throw err;
           } else {
-            console.log("something error");
+            throw new Error("something error");
           }
         }
       },
@@ -173,8 +172,9 @@ const useMovieStore = create<
           }));
         } catch (err) {
           if (isAxiosError(err)) {
-            console.log(err.response?.data);
+            throw err;
           }
+          throw new Error("something error");
         }
       },
     }),
