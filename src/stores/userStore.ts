@@ -8,7 +8,7 @@ import { isAxiosError } from "axios";
 type userStore = {
   accessToken: string;
   loading: boolean;
-  login: (user: User) => void;
+  login: (user: User) => Promise<void>;
   logout: () => void;
   register: (user: User) => void;
 };
@@ -26,6 +26,7 @@ const useUserStore = create<userStore>()(
         } catch (err) {
           if (isAxiosError(err)) {
             console.log(err.response?.data);
+            throw err;
           }
           console.log("something error");
         }

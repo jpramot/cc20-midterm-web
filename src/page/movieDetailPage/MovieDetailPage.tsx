@@ -61,7 +61,7 @@ export default function MovieDetailPage() {
   if (movieLoading) {
     return <Loading />;
   }
-  console.log(isFav);
+
   return (
     <div>
       <div className="flex flex-col items-center mt-8 gap-5">

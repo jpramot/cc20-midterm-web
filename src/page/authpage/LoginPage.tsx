@@ -29,16 +29,20 @@ function LoginPage() {
     setInput({ ...input, [e.target.id]: e.target.value });
   };
 
-  const hdlSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const hdlSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = validateLogin(input);
     if (result.error && result.errors) {
       setError(result.errors);
       return;
     }
-    login(input);
-    toast.success("Login success");
-    navigate("/movie");
+    try {
+      await login(input);
+      toast.success("Login success");
+      navigate("/movie");
+    } catch {
+      toast.error("Login failed");
+    }
   };
 
   const hdlBack = () => {

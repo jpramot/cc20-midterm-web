@@ -7,6 +7,7 @@ type ProtectRouteProps = {
 
 export default function ProtectRoute({ children }: ProtectRouteProps) {
   const { accessToken } = useUserStore();
+  console.log(accessToken);
 
   if (!accessToken) {
     return <LoginPage />;

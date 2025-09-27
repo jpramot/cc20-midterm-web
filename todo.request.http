@@ -1,0 +1,96 @@
+@baseUrl = http://cc20-todo-midterm-env.eba-fi9p2pds.ap-southeast-1.elasticbeanstalk.com
+
+@tmdbURL = https://api.themoviedb.org/3/movie/popular?language=en-US&page=1
+
+###
+# @name register
+POST {{baseUrl}}/api/V1/auth/register
+Content-Type: application/json
+
+{
+    "username" : "todoAdmin2",
+    "password" : "123456",
+    "confirmPassword" : "123456"
+}
+
+###
+# @name login
+POST {{baseUrl}}/api/V1/auth/login
+Content-Type: application/json
+
+{
+    "username" : "todoadmin",
+    "password" : "123456"
+}
+
+@token = {{login.response.body.accessToken}}
+
+###
+# @name getAllTodo
+GET {{baseUrl}}/api/V1/todos/51
+
+### 
+# @name getAllTodoAuth
+GET {{baseUrl}}/api/V2/todos
+Authorization: Bearer {{token}}
+
+###
+# @name createTodo
+POST {{baseUrl}}/api/V1/todos
+Content-Type: application/json
+
+{
+    "taskName" : "work",
+    "userId" : 51
+}
+
+###
+# @name createTodoAuth
+POST {{baseUrl}}/api/V2/todos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "taskName" : "try typescript",
+    "userId" : "51"
+}
+
+###
+# @name updateTodo
+PATCH {{baseUrl}}/api/V1/todos/1/51
+Content-Type: application/json
+
+{
+    "taskName" : "test todo",
+    "completed" : true
+}
+
+###
+# @name updateTodoAuth
+PATCH {{baseUrl}}/api/V2/todos/3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "taskName" : "edit todo",
+    "completed" : "false"
+}
+
+### 
+# @name deleteTodo
+DELETE {{baseUrl}}/api/V1/todos/1/46
+
+###
+# @name deleteTodoAuth
+DELETE {{baseUrl}}/api/V2/todos/7
+Authorization: Bearer {{token}}
+
+###
+# @name getFavMovie
+GET {{baseUrl}}/api/V3/movies
+Authorization: Bearer {{token}}
+
+
+###
+GET {{tmdbURL}}
+Authorization: Bearer eyJhdWQiOiIwNTE4OWJmYmVkMzM2ZTNjOTA3YTE2ZWE4MTlkZGE0OSIsIm5iZiI6MTc0ODMxOTg4OS4yMTEsInN1YiI6IjY4MzUzZTkxZmNhNWRhNjcwMzJiNzhjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ
